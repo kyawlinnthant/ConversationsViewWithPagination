@@ -1,4 +1,4 @@
-package klt.mdy.conversationviewwithpagination
+package klt.mdy.conversationviewwithpagination.data
 
 import klt.mdy.conversationviewwithpagination.view.MovieItemVo
 
