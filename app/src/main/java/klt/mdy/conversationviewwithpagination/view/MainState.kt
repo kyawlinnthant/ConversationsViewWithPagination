@@ -1,4 +1,4 @@
-package klt.mdy.conversationviewwithpagination
+package klt.mdy.conversationviewwithpagination.view
 
 data class MainState(
     val isLoading: Boolean = false,

@@ -1,6 +1,7 @@
-package klt.mdy.conversationviewwithpagination
+package klt.mdy.conversationviewwithpagination.data
 
 import android.util.Log
+import klt.mdy.conversationviewwithpagination.RemoteResource
 
 class PaginationImpl<Key,Item>(
     private val initialKey : Key,
@@ -9,7 +10,7 @@ class PaginationImpl<Key,Item>(
     private inline val getNextKey: suspend (List<Item>) -> Key,
     private inline val onError: suspend (String) -> Unit,
     private inline val onSuccess: suspend (items: List<Item>, newKey: Key) -> Unit
-) : PaginationProvider<Key,Item>{
+) : PaginationProvider<Key, Item> {
 
     private var currentKey = initialKey
     private var isMakingRequest = false

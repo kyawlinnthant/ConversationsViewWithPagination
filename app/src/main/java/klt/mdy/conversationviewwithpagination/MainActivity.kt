@@ -3,6 +3,7 @@ package klt.mdy.conversationviewwithpagination
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,10 +20,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import klt.mdy.conversationviewwithpagination.ui.theme.ConversationViewWithPaginationTheme
+import klt.mdy.conversationviewwithpagination.view.ConversationItemView
+import klt.mdy.conversationviewwithpagination.view.MainAction
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -75,14 +77,7 @@ fun ConversationScreen() {
                     if (i >= state.oldItems.lastIndex && !state.endOfPaginationReached && !state.isLoading) {
                         vm.loadNextItems()
                     }
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        text = item.originalTitle,
-                        fontSize = 20.sp,
-                        color = Color.Black
-                    )
+                    ConversationItemView(item = item)
                 }
                 item {
                     if (state.isLoading) {
@@ -132,10 +127,13 @@ fun ConversationScreen() {
             }
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(76.dp)
+                    .padding(all = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TextField(
+                OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
@@ -147,7 +145,7 @@ fun ConversationScreen() {
                         Text(text = "Type message")
                     }
                 )
-                Button(onClick = {
+                TextButton(onClick = {
 
                     if (scrollState.firstVisibleItemIndex == 0 && !scrollState.isScrollInProgress) {
                         vm.onAction(MainAction.SendMessage)
@@ -165,6 +163,7 @@ fun ConversationScreen() {
         val scrollContext = rememberScrollContext(scrollState)
         if (scrollContext.isTop) {
             vm.onAction(MainAction.ClickNewMessage)
+            vm.onAction(MainAction.ClearNewMessages)
         }
 
         if (
@@ -174,26 +173,35 @@ fun ConversationScreen() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 60.dp),
-                contentAlignment = Alignment.Center
+                    .padding(
+                        end = 20.dp,
+                        bottom = 86.dp
+                    ),
+                contentAlignment = Alignment.BottomEnd
             ) {
                 Surface(
                     modifier = Modifier
-                        .size(30.dp)
+                        .size(35.dp)
                         .clip(CircleShape)
+                        .background(MaterialTheme.colors.onSurface.copy(0.5f
+                        ))
                         .clickable {
                             scope.launch {
                                 scrollState.animateScrollToItem(index = 0)
                             }
-                        },
+                        }.padding(5.dp),
                     elevation = 16.dp,
                     contentColor = Color.White,
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.KeyboardArrowDown,
-                        contentDescription = "scroll in top"
-                    )
+                    shape = CircleShape,
+                    ) {
+                    Box(modifier = Modifier.matchParentSize().clip(CircleShape).background(MaterialTheme.colors.primary)){
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowDown,
+                            contentDescription = "scroll in top",
+                            tint = MaterialTheme.colors.surface
+                        )
+                    }
+
                 }
             }
         }
@@ -202,35 +210,34 @@ fun ConversationScreen() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(
-                        end = 20.dp,
-                        bottom = 90.dp
-                    ),
-                contentAlignment = Alignment.BottomEnd
+                    .padding(bottom = 80.dp),
+                contentAlignment = Alignment.Center
             ) {
-                Surface(
+
+                Box(
                     modifier = Modifier
-                        .size(50.dp)
                         .clip(CircleShape)
+                        .background(MaterialTheme.colors.onSurface.copy(alpha = 0.7f))
+
                         .clickable {
+
                             vm.onAction(MainAction.ClickNewMessage)
                             scope.launch {
-                                scrollState.animateScrollToItem(index = 0)
+                                scrollState.animateScrollToItem(index = state.newItems.size - 1)
                             }
-                        },
-                    elevation = 16.dp,
-                    contentColor = Color.White,
-                    color = MaterialTheme.colors.primary,
-                ) {
+                            vm.onAction(MainAction.ClearNewMessages)
+
+                        }
+                        .padding(8.dp),
+
+                    ) {
                     Text(
-                        modifier = Modifier.matchParentSize(),
-                        text = state.newItems.size.toString(),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.h4
+                        text = "${state.newItems.size} new messages",
+                        color = MaterialTheme.colors.surface
                     )
                 }
-            }
 
+            }
         }
     }
 }

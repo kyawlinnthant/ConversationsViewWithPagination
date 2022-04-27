@@ -1,10 +1,13 @@
-package klt.mdy.conversationviewwithpagination
+package klt.mdy.conversationviewwithpagination.di
 
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import klt.mdy.conversationviewwithpagination.data.ApiService
+import klt.mdy.conversationviewwithpagination.data.Repository
+import klt.mdy.conversationviewwithpagination.data.RepositoryImpl
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

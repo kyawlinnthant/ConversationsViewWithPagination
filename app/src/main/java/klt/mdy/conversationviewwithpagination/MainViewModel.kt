@@ -6,6 +6,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import klt.mdy.conversationviewwithpagination.data.PaginationImpl
+import klt.mdy.conversationviewwithpagination.data.Repository
+import klt.mdy.conversationviewwithpagination.view.MainAction
+import klt.mdy.conversationviewwithpagination.view.MainEvent
+import klt.mdy.conversationviewwithpagination.view.MainState
+import klt.mdy.conversationviewwithpagination.view.MovieItemVo
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
@@ -73,7 +79,8 @@ class MainViewModel @Inject constructor(
             is MainAction.SendMessage -> {
                 if (_mainState.value.inputText.isNotEmpty()){
                     val newMessage = MovieItemVo(
-                        originalTitle = _mainState.value.inputText
+                        originalTitle = _mainState.value.inputText,
+                        viewType = 1
                     )
                     val originalList = _mainState.value.oldItems
                     val listToChange = originalList.toMutableList()
@@ -87,7 +94,8 @@ class MainViewModel @Inject constructor(
             MainAction.ReceiveMessage -> {
                 if (_mainState.value.inputText.isNotEmpty()) {
                     val newMessage = MovieItemVo(
-                        originalTitle = _mainState.value.inputText
+                        originalTitle = _mainState.value.inputText,
+                        viewType = 1
                     )
                     val newMessageList = _mainState.value.newItems
                     val listToAdd = newMessageList.toMutableList()
@@ -106,6 +114,10 @@ class MainViewModel @Inject constructor(
                 oldUpdate.addAll(index = 0, elements = newUpdate)
                 _mainState.value = mainState.value.copy(
                     oldItems = oldUpdate.toList(),
+                )
+            }
+            MainAction.ClearNewMessages -> {
+                _mainState.value = mainState.value.copy(
                     newItems = emptyList()
                 )
             }

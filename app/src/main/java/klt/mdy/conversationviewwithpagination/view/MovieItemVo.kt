@@ -1,4 +1,4 @@
-package klt.mdy.conversationviewwithpagination
+package klt.mdy.conversationviewwithpagination.view
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -16,5 +16,5 @@ data class MovieItemVo(
     val popularity: Double = -0.0,
     val averageVote: Double = -0.0,
     val voteCount: Int = -1,
-    val viewType: Int = Random.nextInt(from = 1, until = 8)
+    val viewType: Int = Random.nextInt(from = 1, until = 10)
 ) : Parcelable

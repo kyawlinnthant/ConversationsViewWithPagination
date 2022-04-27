@@ -1,5 +1,7 @@
 package klt.mdy.conversationviewwithpagination
 
+import klt.mdy.conversationviewwithpagination.view.MovieItemVo
+
 data class MovieDTO(
     val page: Int,
     val results: List<Movie>,

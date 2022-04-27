@@ -1,4 +1,4 @@
-package klt.mdy.conversationviewwithpagination
+package klt.mdy.conversationviewwithpagination.data
 
 interface PaginationProvider<Key,Item> {
     suspend fun loadMore()

@@ -1,4 +1,4 @@
-package klt.mdy.conversationviewwithpagination
+package klt.mdy.conversationviewwithpagination.view
 
 sealed class MainAction {
     data class ChangeInputText(val text: String) : MainAction()
@@ -6,4 +6,5 @@ sealed class MainAction {
     object SendMessage : MainAction()
     object ReceiveMessage : MainAction()
     object ClickNewMessage : MainAction()
+    object ClearNewMessages : MainAction()
 }
