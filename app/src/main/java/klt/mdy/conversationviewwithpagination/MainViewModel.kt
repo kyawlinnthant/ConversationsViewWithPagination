@@ -47,7 +47,7 @@ class MainViewModel @Inject constructor(
         onSuccess = { items, newKey ->
             Log.d("klt.klt.items",items.toString())
             _mainState.value = mainState.value.copy(
-                items = _mainState.value.items + items,
+                oldItems = _mainState.value.oldItems + items,
                 page = newKey,
                 endOfPaginationReached = items.isEmpty()
             )
@@ -75,13 +75,39 @@ class MainViewModel @Inject constructor(
                     val newMessage = MovieItemVo(
                         originalTitle = _mainState.value.inputText
                     )
-                    val originalList = _mainState.value.items
+                    val originalList = _mainState.value.oldItems
                     val listToChange = originalList.toMutableList()
                     listToChange.add(index = 0, element = newMessage)
+
                     _mainState.value = mainState.value.copy(
-                        items = listToChange
+                        oldItems = listToChange
                     )
                 }
+            }
+            MainAction.ReceiveMessage -> {
+                if (_mainState.value.inputText.isNotEmpty()) {
+                    val newMessage = MovieItemVo(
+                        originalTitle = _mainState.value.inputText
+                    )
+                    val newMessageList = _mainState.value.newItems
+                    val listToAdd = newMessageList.toMutableList()
+                    listToAdd.add(index = 0, element = newMessage)
+
+                    _mainState.value = mainState.value.copy(
+                        newItems = listToAdd
+                    )
+                }
+            }
+            MainAction.ClickNewMessage -> {
+                val newMessages = _mainState.value.newItems
+                val oldMessages = _mainState.value.oldItems
+                val newUpdate = newMessages.toMutableList()
+                val oldUpdate = oldMessages.toMutableList()
+                oldUpdate.addAll(index = 0, elements = newUpdate)
+                _mainState.value = mainState.value.copy(
+                    oldItems = oldUpdate.toList(),
+                    newItems = emptyList()
+                )
             }
         }
     }

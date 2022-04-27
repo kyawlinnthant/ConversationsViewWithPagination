@@ -20,6 +20,7 @@ class PaginationImpl<Key,Item>(
         }
         isMakingRequest = true
         onLoadUpdated(true)
+        onError("")
         val result = onRequest(currentKey)
         isMakingRequest = false
         when(result){
