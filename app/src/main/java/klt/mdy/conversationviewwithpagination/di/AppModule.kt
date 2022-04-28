@@ -15,10 +15,12 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+object
+AppModule {
     @Provides
     @Singleton
     fun providesRetrofit(): Retrofit {
+
         return Retrofit.Builder()
             .baseUrl("https://api.themoviedb.org/3/")
             .client(
